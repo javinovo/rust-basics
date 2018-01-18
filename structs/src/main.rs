@@ -1,5 +1,5 @@
 
-// Concepts: struct, impl, self, field, method, associate function, 
+// Concepts: struct, impl, self, field, method, associate function, unit-like struct
 
 #[derive(Debug)] // Allows println!("{:?}")
 struct Rectangle {
@@ -47,4 +47,15 @@ fn main()
     }
 
     println!("Fits: {}", rect1.can_hold(&rect2));
+
+
+    // Field names are optional. 
+    // Even the fields themselves: those structs are called unit-like structs which are useful to implement traits without data
+
+    #[derive(Debug)] // Allows println!("{:?}")
+    struct Point(i32, i32); 
+
+    let p = Point(1, 2);
+    let Point { 0: x, 1: y } = p; // Supports destructuring
+    println!("{:?}, 0: {}, 1: {}, x: {}, y: {}", p, p.0, p.1, x, y);
 }

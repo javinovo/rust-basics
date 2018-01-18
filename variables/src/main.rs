@@ -1,6 +1,6 @@
 #[allow(unused_variables)]
 
-// Concepts: shadowing, mutability, copy, clone, move, ownership, borrowing, reference, slice
+// Concepts: shadowing, mutability, copy, clone, move, ownership, borrowing, reference, slice, tuple
 fn main() {
     let a = String::from("a value");
     let a = String::from("another value"); // Shadows the previous one
@@ -36,6 +36,11 @@ fn main() {
     let (len, d) = calculate_length(c);
     println!("{}", d); // Ownership is back into this scope but a new variable has it (ie. c is invalid)
 
+    // Previously we deconstructed the returned tuple into its parts but we can use it directly
+    let copy = d.clone();
+    let tuple = calculate_length(copy);
+    println!("{}", tuple.1);
+
     // Ownership transfer can be avoided by using references with &. This is called borrowing: 
     // - The data won't be dropped after leaving the callee scope.
     // - The variable in the caller scope is still valid.
@@ -64,7 +69,7 @@ fn main() {
     println!("{}", mutable_slice);
 }
 
-fn calculate_length(s: String) -> (usize, String) {
+fn calculate_length(s: String) -> (usize, String) { // Declaring parameter types is compulsory
     (s.len(), s) // The order matters: inverting it would yield error[E0382]: use of moved value: `s`
 }
 
