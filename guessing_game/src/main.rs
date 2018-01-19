@@ -1,8 +1,10 @@
+extern crate rand;
+
 use std::io;
 use std::cmp::Ordering;
 use rand::Rng;
 
-fn guess() {
+fn main() {
     println!("Guess the number!");
 
     let secret_number = rand::thread_rng().gen_range(1, 101);
@@ -18,12 +20,12 @@ fn guess() {
 
         println!("You guessed {} chars: {}", read_chars, guess);
 
-        let guess: u32 = match guess.trim().parse() {
-            Ok(num) => num,
+        let guess  = match guess.trim().parse() {
+            Ok(num) => Guess::new(num),
             Err(_) => continue
         };
 
-        match guess.cmp(&secret_number) {
+        match guess.value.cmp(&secret_number) {
             Ordering::Less => println!("Too small!"),
             Ordering::Greater => println!("Too big!"),
             Ordering::Equal => {
@@ -32,4 +34,27 @@ fn guess() {
             }
         }    
     }
+}
+
+// Improved in chapter 9
+
+struct Guess {
+    value: u32,
+}
+
+impl Guess {
+    pub fn new(value: u32) -> Guess {
+        if value < 1 || value > 100 {
+            panic!("Guess value must be between 1 and 100, got {}.", value);
+        }
+
+        Guess {
+            value
+        }
+    }
+    
+    /* Getter: would only be required if this was in a different module (along with making the struct public)
+    pub fn value(&self) -> u32 {
+        self.value
+    }*/
 }

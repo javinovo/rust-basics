@@ -1,5 +1,6 @@
+#[allow(unused_variables)]
 
-// Concepts: struct, impl, self, field, method, associate function, unit-like struct
+// Concepts: struct, impl, self, field, method, associate function, unit-like struct, generics, monomorphization
 
 #[derive(Debug)] // Allows println!("{:?}")
 struct Rectangle {
@@ -58,4 +59,31 @@ fn main()
     let p = Point(1, 2);
     let Point { 0: x, 1: y } = p; // Supports destructuring
     println!("{:?}, 0: {}, 1: {}, x: {}, y: {}", p, p.0, p.1, x, y);
+
+
+    // Generics allow to define structure and methods supporting several types.
+    // To avoid impacting performance, the compiler performs monomorphization: it  generates the concrete types by analyzing usage
+    
+    let rect = Rect::new(2, 3);
+    println!("Area of generic rect: {}", rect.area());
+
+    let string_rect = Rect::new(String::from("2"), String::from("3"));
+    //generic_rect.area(); // error[E0599]: no method named `area` found for type `Rect<std::string::String>` in the current scope
+}
+
+struct Rect<T> {
+    width: T,
+    height: T
+}
+
+impl<T> Rect<T> {
+    fn new(width: T, height: T) -> Rect<T> {
+        Rect { width, height }
+    }
+}
+
+impl Rect<i32> { // Methods may be implemented only for certain type parameters
+    fn area(&self) -> i32 {
+        self.width * self.height
+    }
 }

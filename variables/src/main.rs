@@ -67,6 +67,24 @@ fn main() {
     // If we didn't use the previous scope: error[E0502]: cannot borrow `e` as mutable because it is also borrowed as immutable
     let mutable_slice = &mut e[..];
     println!("{}", mutable_slice);
+
+
+    fn max(list: &[i32]) -> i32 { // list is a slice of i32
+        let mut largest = list[0];
+        
+        for &n in list.iter() {
+            if n > largest {
+                largest = n;
+            }
+        }
+
+        largest
+    }
+
+    let array = [1, 2, 3];
+    let vector = vec![1, 2, 3];
+
+    println!("Max of array: {}, max of vector: {}", max(&array), max(&vector));
 }
 
 fn calculate_length(s: String) -> (usize, String) { // Declaring parameter types is compulsory
