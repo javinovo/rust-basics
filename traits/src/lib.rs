@@ -47,6 +47,6 @@ use std::fmt;
 
 impl fmt::Display for Tweet {
     fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        write!(formatter, "Tweet from {}: {}", self.username, self.content)
+        write!(formatter, "{}", self.summary())
     }
 }

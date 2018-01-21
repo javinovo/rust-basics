@@ -19,8 +19,6 @@ fn main() {
     println!("1 new tweet: {}", tweet.summary());
 
     notify(tweet);
-
-    // Implementations of a trait on any type that satisfies the trait bounds are called blanket implementations, and are extensively used in the Rust standard library.
 }
 
 use std::fmt::Display;
@@ -32,7 +30,33 @@ pub fn notify<T: Summarizable + Display>(item: T) { // Trait bound restricting t
     println!("Breaking news from {}: {}", item.author_summary(), item);
 }
 
-pub fn notify2<T>(item: T) 
-    where T : Summarizable + Display{ // We can define bounds with 'where' for clarity
+pub fn notify2<T>(item: T) where T : Summarizable + Display { // We can also define bounds with 'where' for clarity
     println!("Breaking news from {}: {}", item.author_summary(), item);
 }
+
+// Trait bounds can also we used to filter generics on method implementations
+
+struct Point<T> {
+    x: T,
+    y: T
+}
+
+impl<T: std::fmt::Display> Point<T> { // Trait bound restricting the print method to Points of some type implementing the Display trait
+    fn print(&self) {
+        println!("x: {}, y: {}", self.x, self.y);
+    }
+}
+
+// We can also conditionally implement a trait for any type that implements a trait.
+// Implementations of a trait on any type that satisfies the trait bounds are called blanket implementations, and are extensively used in the Rust standard library.
+
+trait SomeTrait {
+    fn hi(&self);
+}
+
+impl<T: std::fmt::Display> SomeTrait for T { // Implement the SomeTrait trait for all types implementing the trait Display
+    fn hi(&self) {
+        println!("{}", self);
+    }
+}
+
