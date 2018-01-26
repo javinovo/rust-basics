@@ -1,6 +1,6 @@
 #[allow(dead_code)]
 
-// Conceptos: borrow checker, lifetime annotation, lifetime elision
+// Conceptos: borrow checker, lifetime annotation, static lifetime, lifetime elision
 
 // Every reference has a lifetime. Some are either implicit or inferred but some times we have to explicitly tell the compiler. 
 // The main aim of lifetimes is to prevent dangling references, which will cause a program to reference data other than the data 

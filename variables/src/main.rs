@@ -46,6 +46,11 @@ fn main() {
     // - The variable in the caller scope is still valid.
     println!("{} is the length of '{}'", length(&d), d); // Borrow it and use it right after
 
+    // Alternative syntax (normally used in pattern matching)
+    let ref x1 = d; // `ref` on the left side of an assignment is like adding `&` on the right side
+    let x2 = &d;
+    assert_eq!(x1, x2);
+
     // It is possible to alter borrowed data since references can be mutable using &mut.
     // There may be either several immutable references or one mutable reference at the same time.
     let mut e = String::from("text with length: "); // Must be mutable
