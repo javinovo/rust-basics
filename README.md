@@ -2,7 +2,7 @@
 
 [Rust](https://www.rust-lang.org) is a [procedural](https://en.wikipedia.org/wiki/Procedural_programming) strongly-typed language with some functional features like **closures** and **iterators**. Conceived as a systems programming language it also offers considerable concurrency support and interoperability with other languages.
 
-It is NOT object-oriented, featuring the following [algebraic data types](https://en.wikipedia.org/wiki/Algebraic_data_type):
+It is not object-oriented, [arguably](https://doc.rust-lang.org/book/second-edition/ch17-01-what-is-oo.html). It features the following [algebraic data types](https://en.wikipedia.org/wiki/Algebraic_data_type):
 * Product types: **tuples** and **structs**
 * Sum types: **enums**
 
@@ -25,3 +25,13 @@ All references have a *lifetime* and they may have dependencies on others in whi
 References are mere pointers to data. Smart pointers are structs pointing to data they own and having additional metadata and capabilities. For instance, they implement the *Deref* and *Drop* traits. The former enables the use of the `*` dereference operator while the latter provides the destructor method in charge of freeing resources. Smart pointers help cope with the ownership and reference restrictions by adding a layer of indirection and counting references.
 
 Some smart pointers include *unsafe code*. Rust can be thought of as a combination of two programming languages: Safe Rust and Unsafe Rust. The latter extends the former by allowing some extra things which are not safe but may be required in some situations such as writing low-level abstractions or talking to other languages.
+
+## Concurrency
+
+Rust offers *1:1 threading* meaning that each Rust thread maps to an OS thread. It doesn't natively support a green thread model where a number of language threads maps to a different number of OS threads. This improves performance and minimizes the compiled binary size. However, there are crates offering green threading.
+
+Ownership rules play a vital role in preventing errors in concurrent programming at compile time: the type system and the borrow checker will make sure the code won’t end up with data races or invalid references. 
+
+Most types implement both *Send* and *Sync* marker traits which allow for ownership transfer between threads and referencing from multiple threads, respectively. Furthermore, types composed entirely of types implementing them are automatically marked with them. Manually implementing these traits involves implementing unsafe code.
+
+Transferring data between threads is favored over sharing memory. Message passing through channels is offered in this regard. However, if state must be shared the *Arc* and *Mutex* smart pointers provide fairly safe patterns to do so.

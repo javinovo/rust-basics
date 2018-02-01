@@ -11,7 +11,7 @@ enum Message {
     ChangeColor(i32, i32, i32),
 }
 
-impl Message {
+impl Message { // enums may have methods
     fn call(&self) {        
         match self {  
             &Message::Write(ref msg) => println!("{}", msg),

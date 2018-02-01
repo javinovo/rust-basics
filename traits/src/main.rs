@@ -18,7 +18,8 @@ fn main() {
 
     println!("1 new tweet: {}", tweet.summary());
 
-    notify(tweet);
+    notify(&tweet);
+    notify2(&tweet);
 }
 
 use std::fmt::Display;
@@ -26,11 +27,11 @@ use std::fmt::Display;
 // Any time you want to use behavior defined by a trait on a generic, 
 // you need to specify that trait in the generic type parameter’s type bounds.
 
-pub fn notify<T: Summarizable + Display>(item: T) { // Trait bound restricting the possible types of T
+pub fn notify<T: Summarizable + Display>(item: &T) { // Trait bound restricting the possible types of T
     println!("Breaking news from {}: {}", item.author_summary(), item);
 }
 
-pub fn notify2<T>(item: T) where T : Summarizable + Display { // We can also define bounds with 'where' for clarity
+pub fn notify2<T>(item: &T) where T : Summarizable + Display { // We can also define bounds with 'where' for clarity
     println!("Breaking news from {}: {}", item.author_summary(), item);
 }
 
