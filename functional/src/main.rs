@@ -45,6 +45,18 @@ fn main() {
                                   .filter(|x| x % 3 == 0)
                                   .sum();
     assert_eq!(18, sum);    
+
+
+    // Functions as arguments and return types
+
+    fn add_one(x: i32) -> i32 {
+        x + 1
+    }
+
+    println!("{}", do_twice(add_one, 2)); // pass the function declared above as argument
+    println!("{}", do_twice(returns_add_function(), 2)); // pass the function returned from the function as argument
+    //println!("{}", do_twice(returns_add_closure(), 2));  // error[E0308]: mismatched types: expected fn pointer, found struct `std::boxed::Box`
+    println!("{}", do_twice(returns_add_closure_as_function(), 2));
 }
 
 // We can use trait bounds on generics for closures.
@@ -79,6 +91,7 @@ impl<T> Cacher<T>
 }
 
 
+
 struct Counter {
     count: u32,
     max: u32,
@@ -102,4 +115,31 @@ impl Iterator for Counter {
             None
         }
     }
+}
+
+
+// fn in the arguments is a function pointer. It is a type (unlike closures which are traits: Fn, FnMut, FnOnce)
+// Function pointers implement those 3 closure traits so they can be passed to functions expecting a closure. 
+// However, closures may not be passed to functions expecting a function pointer. 
+// Thus, it is more general to use closures and should be preferred
+fn do_twice(f: fn(i32) -> i32, arg: i32) -> i32 { 
+    f(arg) + f(arg)
+}
+
+fn returns_add_function() -> fn(i32) -> i32 {
+    fn add(x: i32) -> i32 {
+        x + 1
+    }
+
+    add
+}
+
+// Closures may be returned but since they are represented by traits they must be boxed in order to have a known size 
+fn returns_add_closure() -> Box<Fn(i32) -> i32> {
+    Box::new(|x| x + 1)
+}
+
+// Now we are returning a function pointer to a closure: easier to read
+fn returns_add_closure_as_function() -> fn(i32) -> i32 {
+    |x| x +1 
 }
